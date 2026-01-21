@@ -27,8 +27,8 @@ export default function TodosTable({ data, columns, pageSize = 10 }) {
   });
 
   return (
-    <div className="card" style={{ overflow: "hidden" }}>
-      <table className="table">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <table className="w-full border-separate border-spacing-0">
         <thead>
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id}>
@@ -36,20 +36,25 @@ export default function TodosTable({ data, columns, pageSize = 10 }) {
                 const canSort = h.column.getCanSort();
                 const sortDir = h.column.getIsSorted();
                 return (
-                  <th key={h.id} style={{ textAlign: "left" }}>
+                  <th
+                    key={h.id}
+                    className="border-b border-slate-200 bg-slate-50 px-3 py-3 text-left text-xs font-extrabold uppercase tracking-wide text-slate-700"
+                  >
                     <button
                       type="button"
                       onClick={
                         canSort ? h.column.getToggleSortingHandler() : undefined
                       }
-                      className={canSort ? "th-btn" : "th-btn"}
+                      className="flex w-full items-center justify-between gap-2 bg-transparent text-left"
                     >
                       {flexRender(h.column.columnDef.header, h.getContext())}
-                      {sortDir === "asc"
-                        ? " ▲"
-                        : sortDir === "desc"
-                          ? " ▼"
-                          : ""}
+                      <span className="text-slate-400">
+                        {sortDir === "asc"
+                          ? "▲"
+                          : sortDir === "desc"
+                            ? "▼"
+                            : ""}
+                      </span>
                     </button>
                   </th>
                 );
@@ -59,9 +64,12 @@ export default function TodosTable({ data, columns, pageSize = 10 }) {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} className="transition hover:bg-indigo-50/40">
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <td
+                  key={cell.id}
+                  className="border-b border-slate-100 px-3 py-3 text-sm text-slate-900"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
@@ -70,38 +78,33 @@ export default function TodosTable({ data, columns, pageSize = 10 }) {
         </tbody>
       </table>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 12,
-          gap: 12,
-        }}
-      >
-        <div style={{ display: "flex", gap: 8 }}>
+      <div className="flex items-center justify-between gap-3 p-3">
+        <div className="flex gap-2">
           <button
-            className="btn btn-secondary"
+            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 active:translate-y-px disabled:opacity-60"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             Prev
           </button>
           <button
-            className="btn btn-secondary"
+            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 active:translate-y-px disabled:opacity-60"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             Next
           </button>
         </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <span>
-            Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{" "}
-            <strong>{table.getPageCount()}</strong>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-slate-700">
+            Page{" "}
+            <span className="font-extrabold">
+              {table.getState().pagination.pageIndex + 1}
+            </span>{" "}
+            of <span className="font-extrabold">{table.getPageCount()}</span>
           </span>
           <select
-            className="btn btn-secondary"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-200"
             value={table.getState().pagination.pageSize}
             onChange={(e) => table.setPageSize(Number(e.target.value))}
           >

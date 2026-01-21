@@ -30,9 +30,13 @@ export default function Home() {
         enableSorting: true,
         cell: (info) =>
           info.getValue() ? (
-            <span className="pill pill-green">Done</span>
+            <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-1 text-xs font-extrabold text-emerald-800">
+              Done
+            </span>
           ) : (
-            <span className="pill pill-gray">Open</span>
+            <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 text-xs font-extrabold text-slate-700">
+              Open
+            </span>
           ),
       },
       { accessorKey: "userId", header: "User", enableSorting: true },
@@ -43,12 +47,10 @@ export default function Home() {
         cell: ({ row }) => {
           const todo = row.original;
           return (
-            <div
-              style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}
-            >
+            <div className="flex justify-end gap-2">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 active:translate-y-px"
                 onClick={() => {
                   setFeedback(null);
                   setEditTodo(todo);
@@ -58,7 +60,7 @@ export default function Home() {
               </button>
               <button
                 type="button"
-                className="btn btn-danger"
+                className="inline-flex items-center justify-center rounded-xl bg-rose-600 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-rose-600/20 transition hover:bg-rose-700 active:translate-y-px"
                 onClick={() => {
                   setFeedback(null);
                   setDeleteTodo(todo);
@@ -121,28 +123,20 @@ export default function Home() {
   const items = todosQuery.data;
 
   return (
-    <div
-      className="ui-fade-in"
-      style={{ maxWidth: 1000, margin: "0 auto", padding: 24 }}
-    >
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 16,
-          alignItems: "flex-start",
-        }}
-      >
+    <div className="mx-auto max-w-5xl p-6 animate-[ui-fade-in_160ms_ease-out]">
+      <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 style={{ margin: 0 }}>Todos</h1>
-          <p style={{ margin: "6px 0 0", opacity: 0.75 }}>
-            Next.js API + Axios + TanStack Query + TanStack Table
+          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+            Todos
+          </h1>
+          <p className="mt-1 text-sm text-slate-600">
+            Axios + TanStack Query + TanStack Table
           </p>
         </div>
         <button
-          className="btn btn-primary"
           type="button"
           onClick={() => setCreateOpen(true)}
+          className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-700 active:translate-y-px"
         >
           Add Todo
         </button>
@@ -150,33 +144,29 @@ export default function Home() {
 
       {feedback ? (
         <div
-          style={{
-            marginTop: 16,
-            padding: 12,
-            borderRadius: 12,
-            border: "1px solid rgba(0,0,0,0.12)",
-            background:
-              feedback.type === "success"
-                ? "rgba(0,200,120,0.12)"
-                : "rgba(255,0,0,0.10)",
-          }}
+          className={
+            feedback.type === "success"
+              ? "mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-900"
+              : "mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-900"
+          }
         >
           {feedback.message}
         </div>
       ) : null}
 
       {todosQuery.isLoading ? (
-        <div style={{ marginTop: 16 }}>Loading…</div>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
+          Loading…
+        </div>
       ) : null}
 
       {todosQuery.isError ? (
-        <div style={{ marginTop: 16 }}>
-          <div>Failed to load todos.</div>
+        <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+          <div className="font-semibold">Failed to load todos.</div>
           <button
             type="button"
             onClick={() => todosQuery.refetch()}
-            className="btn btn-secondary"
-            style={{ marginTop: 8 }}
+            className="mt-3 inline-flex items-center justify-center rounded-xl border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-900 shadow-sm transition hover:bg-rose-100/30 active:translate-y-px"
           >
             Retry
           </button>
@@ -187,14 +177,16 @@ export default function Home() {
       !todosQuery.isError &&
       Array.isArray(items) &&
       items.length === 0 ? (
-        <div style={{ marginTop: 16 }}>No todos found.</div>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
+          No todos found.
+        </div>
       ) : null}
 
       {!todosQuery.isLoading &&
       !todosQuery.isError &&
       Array.isArray(items) &&
       items.length > 0 ? (
-        <div style={{ marginTop: 16 }}>
+        <div className="mt-4">
           <TodosTable data={items} columns={columns} pageSize={10} />
         </div>
       ) : null}
@@ -226,24 +218,25 @@ export default function Home() {
 
       {deleteTodo ? (
         <Modal title="Delete Todo" onClose={() => setDeleteTodo(null)}>
-          <div style={{ display: "grid", gap: 12 }}>
-            <div>Are you sure you want to delete “{deleteTodo.title}”?</div>
-            <div
-              style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}
-            >
+          <div className="grid gap-4">
+            <div className="text-sm text-slate-700">
+              Are you sure you want to delete “
+              <span className="font-semibold">{deleteTodo.title}</span>”?
+            </div>
+            <div className="flex justify-end gap-2">
               <button
-                className="btn btn-secondary"
                 type="button"
                 onClick={() => setDeleteTodo(null)}
                 disabled={deleteMutation.isPending}
+                className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 active:translate-y-px disabled:opacity-60"
               >
                 Cancel
               </button>
               <button
-                className="btn btn-danger"
                 type="button"
                 onClick={onDelete}
                 disabled={deleteMutation.isPending}
+                className="inline-flex items-center justify-center rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-rose-600/20 transition hover:bg-rose-700 active:translate-y-px disabled:opacity-60"
               >
                 {deleteMutation.isPending ? "Working…" : "Delete"}
               </button>
